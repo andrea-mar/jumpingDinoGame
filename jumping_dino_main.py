@@ -27,6 +27,12 @@ green = 0, 225, 0
 dinosaur = pygame.image.load("dinosaur.png")
 dinosaur = pygame.transform.scale(dinosaur, (100, 100))
 
+# JUMP - variables
+jumping = False
+y_gravity = 0.1
+jump_height = 6
+jump_velocity = jump_height
+
 # the code below will be executed repeatedly until the player closes/quits the game
 while True:
     for event in pygame.event.get():
@@ -38,14 +44,19 @@ while True:
     # draw the ground
     pygame.draw.rect(stage, green, pygame.Rect(left, top, ground_width, ground_height))
     
-    # JUMP - no physics
+    # JUMP - simple physics
     keys = pygame.key.get_pressed()
-    # moves dinosaur up but not beyond the screen limit
-    if keys[pygame.K_SPACE] and dino_y > 0:
-            dino_y = dino_y - 5
-    # moves dinosaur down until it reaches the ground
-    elif dino_y < 160:
-        dino_y = dino_y + 5
+    if keys[pygame.K_SPACE]:
+        jumping = True
+    
+    if jumping == True:
+        # move dino up when velocity is positive, and down when velocity is negative
+        dino_y = dino_y - jump_velocity
+        jump_velocity = jump_velocity - y_gravity
+        # stop jumping when dino reaches the ground
+        if jump_velocity < -jump_height:
+            jumping = False
+            jump_velocity = jump_height
 
     # update dinosaur on screen
     stage.blit(dinosaur, (dino_x, dino_y))
