@@ -2,6 +2,7 @@ import pygame
 
 # initialize pygame modules
 pygame.init()
+pygame.font.init()
 
 # STAGE
 # set the stage/window dimentions
@@ -26,6 +27,7 @@ green = 0, 225, 0
 # load the dinosaur image
 dinosaur = pygame.image.load("dinosaur.png")
 dinosaur = pygame.transform.scale(dinosaur, (100, 100))
+dinorect = dinosaur.get_rect(center=(dino_x, dino_y))
 
 # JUMP - variables
 jumping = False
@@ -40,6 +42,14 @@ jump_velocity = jump_height
 cactus = pygame.image.load('cactus.png')
 cactus = pygame.transform.scale(cactus, (50, 70))
 cactus_speed = 2
+
+# MESSAGES
+# messages colour
+white = 255, 255, 255
+# create display for game over message
+game_over_font = pygame.font.SysFont('Comic Sans MS', 30)
+game_over_surface = game_over_font.render('', False, white)
+(game_over_width, game_over_hight) = (stage_width/2 - 80, stage_hight/2 - 50)
 
 # the code below will be executed repeatedly until the player closes/quits the game
 while True:
@@ -56,6 +66,17 @@ while True:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_SPACE]:
         jumping = True
+
+    # collision detection
+    dinorect = dinosaur.get_rect(center=(dino_x, dino_y))
+    cactusrect = cactus.get_rect(center=(cactus_x,cactus_y))
+    if pygame.Rect.colliderect(cactusrect, dinorect) == True:
+        # stop moving the cactus
+        cactus_speed = 0
+        # stop the dinosaur from jumping
+        jumping = False
+        # show game over message
+        game_over_surface = game_over_font.render('Game Over', False, white)
     
     if jumping == True:
         # move dino up when velocity is positive, and down when velocity is negative
@@ -74,6 +95,8 @@ while True:
         cactus_x = stage_width
     # update cactus on screen
     stage.blit(cactus, (cactus_x, cactus_y))
+    # update game over message
+    stage.blit(game_over_surface, (game_over_width, game_over_hight))
 
     # update the whole stage
     pygame.display.flip()
