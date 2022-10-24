@@ -33,6 +33,13 @@ y_gravity = 0.1
 jump_height = 6
 jump_velocity = jump_height
 
+# CACTUS
+# coordinates for the starting position of the cactus
+(cactus_x, cactus_y) = (700, 190)
+# load the cactus image
+cactus = pygame.image.load('cactus.png')
+cactus = pygame.transform.scale(cactus, (50, 70))
+
 # the code below will be executed repeatedly until the player closes/quits the game
 while True:
     for event in pygame.event.get():
@@ -60,6 +67,8 @@ while True:
 
     # update dinosaur on screen
     stage.blit(dinosaur, (dino_x, dino_y))
+    # update cactus on screen
+    stage.blit(cactus, (cactus_x, cactus_y))
 
     # update the whole stage
     pygame.display.flip()
