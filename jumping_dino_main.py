@@ -39,6 +39,7 @@ jump_velocity = jump_height
 # load the cactus image
 cactus = pygame.image.load('cactus.png')
 cactus = pygame.transform.scale(cactus, (50, 70))
+cactus_speed = 2
 
 # the code below will be executed repeatedly until the player closes/quits the game
 while True:
@@ -64,9 +65,13 @@ while True:
         if jump_velocity < -jump_height:
             jumping = False
             jump_velocity = jump_height
-
     # update dinosaur on screen
     stage.blit(dinosaur, (dino_x, dino_y))
+
+    # CACTUS MOVE RIGHT TO LEFT
+    cactus_x = cactus_x - cactus_speed
+    if cactus_x < -50:
+        cactus_x = stage_width
     # update cactus on screen
     stage.blit(cactus, (cactus_x, cactus_y))
 
