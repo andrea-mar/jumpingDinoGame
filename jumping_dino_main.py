@@ -44,12 +44,16 @@ cactus = pygame.transform.scale(cactus, (50, 70))
 cactus_speed = 2
 
 # MESSAGES
-# messages colour
+# messages color and font
 white = 255, 255, 255
+game_font = pygame.font.SysFont('Comic Sans', 30)
 # create display for game over message
-game_over_font = pygame.font.SysFont('Comic Sans MS', 30)
-game_over_surface = game_over_font.render('', False, white)
+game_over_surface = game_font.render('', False, white)
 (game_over_width, game_over_hight) = (stage_width/2 - 80, stage_hight/2 - 50)
+# create display for points
+points = 0
+points_surface = game_font.render(f'Points: {points}', False, white)
+(points_width, points_hight) = (20, 20)
 
 # the code below will be executed repeatedly until the player closes/quits the game
 while True:
@@ -76,7 +80,7 @@ while True:
         # stop the dinosaur from jumping
         jumping = False
         # show game over message
-        game_over_surface = game_over_font.render('Game Over', False, white)
+        game_over_surface = game_font.render('Game Over', False, white)
     
     if jumping == True:
         # move dino up when velocity is positive, and down when velocity is negative
@@ -93,11 +97,14 @@ while True:
     cactus_x = cactus_x - cactus_speed
     if cactus_x < -50:
         cactus_x = stage_width
+        # gain a point when cactus completes a move
+        points = points + 1
+        points_surface = game_font.render(f'Points: {points}', False, white)
     # update cactus on screen
     stage.blit(cactus, (cactus_x, cactus_y))
     # update game over message
     stage.blit(game_over_surface, (game_over_width, game_over_hight))
-
+    # update points message
+    stage.blit(points_surface, (points_width, points_hight))
     # update the whole stage
     pygame.display.flip()
- 
